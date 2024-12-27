@@ -1,0 +1,46 @@
+{# templates/article/new.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer un Article{% endblock %}
+
+{% block body %}
+    <h1>Ajouter un Nouvel Article</h1>
+
+    {{ form_start(form) }}
+        {{ form_row(form.name) }}
+        {{ form_row(form.description) }}
+        {{ form_row(form.category) }}
+        
+        <div>Ajouter des images</div>
+        <div id="illustrations-wrapper">
+            {{ form_widget(form.illustrations) }}
+            <button type="button" class="add_item_link" data-collection-holder-class="illustration-collection">Ajouter une image</button>
+        </div>
+
+        <div>Ajouter un lien pour une vidéo</div>
+        <div id="videos-wrapper">
+            {{ form_widget(form.videos) }}
+            <button type="button" class="add_item_link" data-collection-holder-class="video-collection">Ajouter un embed code</button>
+        </div>
+
+        <button class="btn btn-primary">Envoyer</button>
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.add_item_link').forEach(function (btn) {
+                btn.addEventListener('click', function (e) {
+                    const collectionHolder = document.querySelector('.' + e.currentTarget.dataset.collectionHolderClass);
+                    const item = document.createElement('li');
+
+                    item.innerHTML = collectionHolder.dataset.prototype.replace(/__name__/g, collectionHolder.children.length);
+                    collectionHolder.appendChild(item);
+                });
+            });
+        });
+    </script>
+{% endblock %}
