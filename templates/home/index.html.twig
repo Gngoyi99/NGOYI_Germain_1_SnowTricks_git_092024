@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Snowtricks{% endblock %}
+
+{% block header_title %}Snowtricks{% endblock %}
+
+{% block body %}
+<h1>Figures</h1>
+
+{% for article in articles %}
+    <div class="article">
+        <h2>{{ article.name }}</h2>
+        <p>Catégorie: {{ article.category }}</p>
+        {# <p>Auteur: {{ article.user_id }}</p> Faire une concat pour afficher le user#}
+
+        <a href="{{ path('article_edit', {'id': article.id}) }}" class="btn btn-primary">Modifier</a>
+
+        <form method="post" action="{{ path('article_delete', {'id': article.id}) }}" style="display:inline;" onsubmit="return confirm('Voulez-vous vraiment supprimer cet article ?');">
+            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ article.id) }}">
+            <button type="submit" class="btn btn-danger">Supprimer</button>
+        </form>
+    </div>
+{% else %}
+    <p>Aucun article.</p>
+{% endfor %}
+{% endblock %}
