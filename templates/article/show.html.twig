@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>{{ article.name }}</h1>
+    <p>{{ article.description }}</p>
+    <p>{{ article.category }}</p>
+
+    <h2>Illustrations</h2>
+    {% for illustration in article.illustrations %}
+        <img src="{{ asset('uploads/illustrations/' ~ illustration.url) }}" alt="{{ illustration.url }}">
+    {% endfor %}
+
+    <h2>Vidéos</h2>
+    {% for video in article.videos %}
+        <div>{{ video.embedCode|raw }}</div>
+    {% endfor %}
+
+    <a href="{{ path('article_edit', {'id': article.id}) }}">Modifier</a>
+
+    <form method="post" action="{{ path('article_delete', {'id': article.id}) }}" onsubmit="return confirm('Voulez-vous vraiment supprimer cet article ?');">
+        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ article.id) }}">
+        <button type="submit">Supprimer</button>
+    </form>
+{% endblock %}
