@@ -29,7 +29,7 @@ class ArticleService
         // Vérification de l'unicité du nom de l'article
         $existingArticle = $this->entityManager->getRepository(Article::class)->findOneBy(['name' => $article->getName()]);
         if ($existingArticle) {
-            throw new \Exception('Un article avec ce nom existe déjà.');
+            throw new \Exception('Un article avec ce nom existe déjà !');
         }
 
         // Assigner l'utilisateur à l'article
