@@ -1,0 +1,88 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier l'Article{% endblock %}
+
+{% block body %}
+    <h1>Modifier l'Article</h1>
+
+    <div class="row">
+        <div class="col-md-8">
+            <!-- Formulaire de modification de l'article -->
+            {{ form_start(form) }}
+                {{ form_row(form.name) }}
+                {{ form_row(form.description) }}
+                {{ form_row(form.category) }}
+
+                <h3>Ajouter des images</h3>
+                <div id="illustrations-wrapper">
+                    {% for illustration in article.illustrations %}
+                        <div>
+                            <img src="{{ asset('uploads/illustrations/' ~ illustration.url) }}" alt="Image" width="100">
+                            <p>Nom de l'image: {{ illustration.url }}</p>
+                        </div>
+                    {% endfor %}
+                    {{ form_widget(form.illustrations) }}
+                    <button type="button" class="add_item_link" data-collection-holder-class="illustration-collection">Ajouter une image</button>
+                </div>
+
+                <h3>Ajouter un lien pour une vidéo</h3>
+                <div id="videos-wrapper">
+                    {% for video in article.videos %}
+                        <div>
+                            <p>URL de la vidéo: {{ video.embedCode }}</p>
+                        </div>
+                    {% endfor %}
+                    {{ form_widget(form.videos) }}
+                    <button type="button" class="add_item_link" data-collection-holder-class="video-collection">Ajouter un embed code</button>
+                </div>
+
+                <button class="btn btn-primary">Envoyer</button>
+                <button class="btn btn-danger">Annuler</button>
+            {{ form_end(form) }}
+        </div>
+
+        <div class="col-md-4">
+            <!-- Liste des images et vidéos existantes -->
+            <h3>Images associées à cet article :</h3>
+            <ul>
+                {% for illustration in article.illustrations %}
+                    <li>
+                        <img src="{{ asset('uploads/illustrations/' ~ illustration.url) }}" alt="Image" width="100">
+                        <p>{{ illustration.url }}</p>
+                    </li>
+                {% else %}
+                    <li>Aucune image associée à cet article.</li>
+                {% endfor %}
+            </ul>
+
+            <h3>Vidéos associées à cet article :</h3>
+            <ul>
+                {% for video in article.videos %}
+                    <li>
+                        <p>{{ video.embedCode }}</p>
+                    </li>
+                {% else %}
+                    <li>Aucune vidéo associée à cet article.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.add_item_link').forEach(function (btn) {
+                btn.addEventListener('click', function (e) {
+                    const collectionHolder = document.querySelector('.' + e.currentTarget.dataset.collectionHolderClass);
+                    const item = document.createElement('li');
+
+                    item.innerHTML = collectionHolder.dataset.prototype.replace(/__name__/g, collectionHolder.children.length);
+                    collectionHolder.appendChild(item);
+                });
+            });
+        });
+    </script>
+{% endblock %}
