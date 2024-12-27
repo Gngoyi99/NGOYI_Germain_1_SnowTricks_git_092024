@@ -1,0 +1,10 @@
+{# templates/article/success.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Article Created{% endblock %}
+
+{% block body %}
+    <h1>Nouvelle création d'article!</h1>
+    <a href="{{ path('article_new') }}" class="btn btn-primary">Crée un autre article</a>
+{% endblock %}
