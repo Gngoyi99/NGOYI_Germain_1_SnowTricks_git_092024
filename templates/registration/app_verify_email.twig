@@ -1,0 +1,16 @@
+{# templates/registration/app_verify_email.twig #}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Email de confirmation</title>
+</head>
+<body>
+    <h1>Bonjour,</h1>
+    <p>Merci de vous être inscrit sur Snowtricks. Pour activer votre compte, veuillez cliquer sur le lien ci-dessous :</p>
+    <p><a href="{{ signedUrl }}">Confirmer mon compte</a></p>
+    <a href="{{ url('app_verify_email', {token: token}) }}">Valider</a>
+    {# <p>Si vous n'avez pas demandé cette inscription, veuillez ignorer cet email.</p> #}
+</body>
+</html>
