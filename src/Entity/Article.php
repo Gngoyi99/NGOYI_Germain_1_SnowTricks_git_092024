@@ -25,6 +25,9 @@ class Article
     #[ORM\Column(length: 255)]
     private ?string $category = null;
 
+    #[ORM\Column(length: 255, unique: true)]
+    private ?string $slug = null;
+
     #[ORM\Column]
     private \DateTimeImmutable $created_at;
 
@@ -158,6 +161,17 @@ class Article
                 $video->setArticle(null);
             }
         }
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): self
+    {
+        $this->slug = $slug;
         return $this;
     }
 }

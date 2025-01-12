@@ -9,7 +9,7 @@
 
 {% for article in articles %}
     <div class="article">
-        <h2>{{ article.name }}</h2>
+        <h2><a href="{{ path('article_details', { id: article.id, slug: article.slug }) }}">{{ article.name }}</a></h2>
         <p>Catégorie: {{ article.category }}</p>
         {# <p>Auteur: {{ article.user_id }}</p> Faire une concat pour afficher le user#}
 
