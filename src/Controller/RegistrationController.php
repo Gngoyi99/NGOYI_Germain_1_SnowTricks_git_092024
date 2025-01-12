@@ -38,6 +38,9 @@ class RegistrationController extends AbstractController
             // Encodage du mot de passe
             $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
 
+            // Définition du rôle par défaut
+            $user->setRoles(['ROLE_USER']);
+
             // Définition du nom d'utilisateur
             $user->setUsername($form->get('username')->getData());
 
@@ -55,8 +58,8 @@ class RegistrationController extends AbstractController
             // Envoi de l'email via PHPMailer
             $subject = "Confirmez votre email";
             $body = "<p>Bonjour {$user->getUsername()},</p>
-                     <p>Veuillez cliquer sur le lien suivant pour valider votre compte : 
-                     <a href='{$validationUrl}'>Valider mon compte</a></p>";
+                    <p>Veuillez cliquer sur le lien suivant pour valider votre compte : 
+                    <a href='{$validationUrl}'>Valider mon compte</a></p>";
 
             $result = $this->mailService->sendEmail(
                 'no-reply@your-domain.com', 
@@ -74,6 +77,7 @@ class RegistrationController extends AbstractController
             'registrationForm' => $form->createView(),
         ]);
     }
+
 
     #[Route('/verify/email/{token}', name: 'app_verify_email')]
     public function verifyUserEmail(string $token, UserRepository $userRepository, TranslatorInterface $translator, EntityManagerInterface $entityManager): Response

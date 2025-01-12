@@ -1,0 +1,33 @@
+{# templates/article/details.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ article.name }} - Détails{% endblock %}
+
+{% block body %}
+    <h1>{{ article.name }}</h1>
+    <p><strong>Description :</strong> {{ article.description }}</p>
+    <p><strong>Catégorie :</strong> {{ article.category }}</p>
+    {# <p><strong>Date de création :</strong> {{ article.created_at|date('d/m/Y H:i') }}</p>
+    <p><strong>Dernière mise à jour :</strong> {{ article.updated_at|date('d/m/Y H:i') }}</p> #}
+
+    <h2>Illustrations</h2>
+    <ul>
+        {% for illustration in article.illustrations %}
+            <li><img src="{{ asset('uploads/' ~ illustration.url) }}" alt="Illustration" style="max-width: 300px;"></li>
+        {% else %}
+            <li>Aucune illustration disponible.</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Vidéos</h2>
+    <ul>
+        {% for video in article.videos %}
+            <li>{{ video.embedCode|raw }}</li>
+        {% else %}
+            <li>Aucune vidéo disponible.</li>
+        {% endfor %}
+    </ul>
+
+    <a href="{{ path('app_home') }}">Retour à la liste des articles</a>
+{% endblock %}

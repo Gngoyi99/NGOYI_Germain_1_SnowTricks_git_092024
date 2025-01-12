@@ -14,7 +14,7 @@ class Mail
 
         try {
             $mail->isSMTP();
-            $mail->Host = '127.0.0.1';  // Serveur SMTP (MailHog ou votre serveur SMTP)
+            $mail->Host = '127.0.0.1';  // Serveur SMTP 
             $mail->SMTPAuth = false;    // Si pas d'authentification
             $mail->Port = 1025;         // Port SMTP
 

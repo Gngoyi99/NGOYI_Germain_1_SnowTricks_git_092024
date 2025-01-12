@@ -24,23 +24,26 @@ class ArticleService
     }
 
     // Créer un nouvel article
-    public function createArticle(Article $article, $illustrations, $videos, $user)
+    public function createArticle(Article $article, $illustrations, $videos, $user): void
     {
-        // Vérification de l'unicité du nom de l'article
+        // Vérification de l'unicité du nom
         $existingArticle = $this->entityManager->getRepository(Article::class)->findOneBy(['name' => $article->getName()]);
         if ($existingArticle) {
             throw new \Exception('Un article avec ce nom existe déjà !');
         }
 
-        // Assigner l'utilisateur à l'article
+        // Générer le slug
+        $slug = strtolower($this->slugger->slug($article->getName()));
+        $article->setSlug($slug);
+
+        // Assigner l'utilisateur
         $article->setUserId($user);
 
-        // Traitement des illustrations
+        // Traitement des illustrations et vidéos
         foreach ($illustrations as $file) {
             $this->handleFileUpload($file, $article);
         }
 
-        // Traitement des vidéos
         foreach ($videos as $embedCode) {
             $this->handleVideo($embedCode, $article);
         }
@@ -74,6 +77,12 @@ class ArticleService
         $this->entityManager->flush();
     }
 
+    public function getArticleDetailsBySlug(string $slug): ?Article
+    {
+        return $this->entityManager->getRepository(Article::class)->findOneBy(['slug' => $slug]);
+    }
+
+
     // Gérer l'upload des fichiers
     private function handleFileUpload($file, Article $article)
     {
@@ -99,4 +108,6 @@ class ArticleService
         $video->setEmbedCode($embedCode);
         $article->addVideo($video);
     }
+
+    
 }
