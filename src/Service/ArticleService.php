@@ -29,11 +29,11 @@ class ArticleService
         // Vérification de l'unicité du nom
         $existingArticle = $this->entityManager->getRepository(Article::class)->findOneBy(['name' => $article->getName()]);
         if ($existingArticle) {
-            throw new \Exception('Un article avec ce nom existe déjà !');
+            throw new \Exception('Un article avec ce nom existe déjà !!');
         }
 
-        // Générer le slug
-        $slug = strtolower($this->slugger->slug($article->getName()));
+        // Génération du slug à partir du nom
+        $slug = $this->slugger->slug($article->getName())->lower();
         $article->setSlug($slug);
 
         // Assigner l'utilisateur
