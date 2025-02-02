@@ -28,6 +28,8 @@ La connexion à la db(voir compose.yaml):
 ```sh
 DATABASE_URL="postgresql://utilisateur:motdepasse@127.0.0.1:5432/app?serverVersion=16&charset=utf8"
 ```
+Voir le fichier Article.txt à la racine qui contient la requête des figures
+
 ## 4️⃣ Compiler les assets
 ```sh
 npm run build
