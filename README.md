@@ -12,7 +12,7 @@
 
 ### 1️⃣ Cloner le projet
 ```sh
-git clone [https://github.com/votre-utilisateur/snowtricks.git](https://github.com/Gngoyi99/NGOYI_Germain_1_SnowTricks_git_092024.git)
+git clone https://github.com/Gngoyi99/NGOYI_Germain_1_SnowTricks_git_092024.git
 cd snowtricks
 ```
 ## 2️⃣ Installer les dépendances
