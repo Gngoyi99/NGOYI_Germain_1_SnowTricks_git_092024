@@ -20,21 +20,19 @@ cd snowtricks
 composer install
 npm install
 ```
-
-## 3️⃣ Configurer les variables d’environnement 
+## 3️⃣ Configurer les variables d’environnement
 ```sh
-composer install
-npm install
+cp .env .env.local
 ```
 La connexion à la db(voir compose.yaml):
 ```sh
 DATABASE_URL="postgresql://utilisateur:motdepasse@127.0.0.1:5432/app?serverVersion=16&charset=utf8"
 ```
-4️⃣ Compiler les assets
+## 4️⃣ Compiler les assets
 ```sh
 npm run build
 ```
-## 6️⃣ Lancer le serveur Symfony
+## 5 Lancer le serveur Symfony
 ```sh
 symfony serve -d
 ```
