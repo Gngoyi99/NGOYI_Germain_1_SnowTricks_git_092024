@@ -37,4 +37,4 @@ npm run build
 ## 6️⃣ Lancer le serveur Symfony
 ```sh
 symfony serve -d
-``
+```
