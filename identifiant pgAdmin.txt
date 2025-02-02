@@ -1,0 +1,4 @@
+localhost: databsae 
+nom: app
+user: app
+mdp: !ChangeMe!
