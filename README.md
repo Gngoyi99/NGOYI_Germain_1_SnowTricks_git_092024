@@ -32,7 +32,7 @@ DATABASE_URL="postgresql://utilisateur:motdepasse@127.0.0.1:5432/app?serverVersi
 ```sh
 npm run build
 ```
-## 5 Lancer le serveur Symfony
+## 5️⃣ Lancer le serveur Symfony
 ```sh
 symfony serve -d
 ```
