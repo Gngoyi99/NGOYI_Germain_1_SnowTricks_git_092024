@@ -1,0 +1,85 @@
+body {
+    background-color: #6ba4d1;
+}
+.sliding-background
+{
+background-color: #c7932d;
+}
+/* Optionnel : Style du texte */
+.sliding-background h1, .sliding-background p {
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7); /* Ajoute une ombre au texte */
+}
+
+main .figure {
+    position: relative; /* Nécessaire pour positionner le pseudo-élément */
+    background-image: url('./images/snow_img.jpg'); /* Spécifiez le chemin de l'image */
+    background-size: cover; /* L'image couvre tout l'élément */
+    background-repeat: no-repeat; /* Évite la répétition de l'image */
+    background-position: center; /* Centre l'image dans l'élément */
+    min-height: 100vh; /* Assure que le main prend toute la hauteur visible */
+    overflow: hidden; /* Empêche les débordements */
+}
+.card {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    min-height: 250px; /* Ajustez la hauteur minimale */
+    max-height: 300px;
+}
+
+.card-title {
+    font-size: 1rem; /* Taille du titre réduite */
+    text-align: center;
+}
+
+.card-text {
+    font-size: 0.875rem; /* Réduire légèrement la taille du texte */
+}
+
+
+.card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.card-title a {
+    font-size: 1.25rem;
+    color: #007bff;
+    text-decoration: none;
+}
+
+.card-title a:hover {
+    text-decoration: underline;
+}
+
+.btn-outline-warning i, .btn-outline-danger i {
+    margin-right: 5px;
+}
+
+h1 {
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+ul.list-group {
+    margin-top: 20px;
+}
+
+ul.list-group li {
+    padding: 15px;
+}
+
+/* Ajustement du footer */
+footer {
+    background-color: #222;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    margin-top: auto; /* Permet de le placer en bas quand la page est courte */
+}
+
+
+
+
+
+

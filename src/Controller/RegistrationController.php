@@ -6,7 +6,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
 use App\Repository\UserRepository;
-use App\Service\Mail; // Import du service PHPMailer
+use App\Service\Mail;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -19,7 +19,7 @@ class RegistrationController extends AbstractController
 {
     private $mailService;
 
-    public function __construct(Mail $mailService) // Injection du service PHPMailer
+    public function __construct(Mail $mailService)
     {
         $this->mailService = $mailService;
     }
@@ -32,44 +32,46 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            /** @var string $plainPassword */
-            $plainPassword = $form->get('plainPassword')->getData();
-
             // Encodage du mot de passe
-            $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
+            $user->setPassword($userPasswordHasher->hashPassword(
+                $user,
+                $form->get('plainPassword')->getData()
+            ));
 
-            // Définition du rôle par défaut
+            // Définition du rôle et du nom d'utilisateur
             $user->setRoles(['ROLE_USER']);
-
-            // Définition du nom d'utilisateur
             $user->setUsername($form->get('username')->getData());
+
+            // Générer un token pour la vérification du mail
+            $token = bin2hex(random_bytes(16));
+            $user->setVerificationToken($token);
 
             $entityManager->persist($user);
             $entityManager->flush();
 
-            // Générer un token de validation
-            $token = bin2hex(random_bytes(16));
-            $user->setVerificationToken($token);
-            $entityManager->flush();
+            // Création du lien de validation
+            $validationUrl = $this->generateUrl('app_verify_email', ['token' => $token], 0);
 
-            // Créer le lien de validation
-            $validationUrl = $this->generateUrl('app_verify_email', ['token' => $token], 0); // 0 pour obtenir une URL absolue
-
-            // Envoi de l'email via PHPMailer
+            // Envoi de l'email de confirmation
             $subject = "Confirmez votre email";
             $body = "<p>Bonjour {$user->getUsername()},</p>
                     <p>Veuillez cliquer sur le lien suivant pour valider votre compte : 
                     <a href='{$validationUrl}'>Valider mon compte</a></p>";
 
-            $result = $this->mailService->sendEmail(
+            if ($this->mailService->sendEmail(
                 'no-reply@your-domain.com', 
                 'Service d\'inscription', 
                 $user->getEmail(), 
                 $subject, 
                 $body
-            );
+            )) {
+                // Message de succès
+                $this->addFlash('success', 'Un email de confirmation vous a été envoyé. Veuillez vérifier votre boîte de réception.');
+            } else {
+                // Message d'erreur
+                $this->addFlash('danger', 'Erreur lors de l\'envoi de l\'email. Veuillez réessayer plus tard.');
+            }
 
-            // Redirection après l'envoi de l'email
             return $this->redirectToRoute('app_home');
         }
 
@@ -78,27 +80,24 @@ class RegistrationController extends AbstractController
         ]);
     }
 
-
     #[Route('/verify/email/{token}', name: 'app_verify_email')]
     public function verifyUserEmail(string $token, UserRepository $userRepository, TranslatorInterface $translator, EntityManagerInterface $entityManager): Response
     {
-        // Recherche de l'utilisateur en fonction du token
         $user = $userRepository->findOneBy(['verificationToken' => $token]);
 
-        if (null === $user) {
-            // Utilisateur non trouvé ou token invalide
-            $this->addFlash('verify_email_error', $translator->trans('Le lien de validation est invalide.'));
+        if (!$user) {
+            // Message d'erreur
+            $this->addFlash('danger', 'Le lien de validation est invalide ou a déjà été utilisé.');
             return $this->redirectToRoute('app_register');
         }
 
-        // Validation du compte
         $user->setVerified(true);
-        $user->setVerificationToken(null);  // Supprimer le token de validation
+        $user->setVerificationToken(null); // Passer le token à null
         $entityManager->flush();
 
-        $this->addFlash('success', 'Votre compte a été activé avec succès.');
+        // Message de succès
+        $this->addFlash('success', 'Votre compte a été activé avec succès. Vous pouvez maintenant vous connecter.');
 
-        // Redirection vers la page de connexion ou accueil
         return $this->redirectToRoute('app_login');
     }
 }

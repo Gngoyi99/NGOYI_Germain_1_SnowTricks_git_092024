@@ -1,73 +1,137 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Modifier l'Article{% endblock %}
+{% block title %}Créer un Article{% endblock %}
 
 {% block body %}
-    <h1>Modifier l'Article</h1>
+<div class="container my-5">
+    <h1 class="mb-4 text-center text-uppercase">Créer un Nouvel Article</h1>
 
-    <div class="row">
-        <div class="col-md-8">
-            <!-- Formulaire de modification de l'article -->
-            {{ form_start(form) }}
-                {{ form_row(form.name) }}
-                {{ form_row(form.description) }}
-                {{ form_row(form.category) }}
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            {{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
 
-                <h3>Ajouter des images</h3>
-                <div id="illustrations-wrapper">
-                    {% for illustration in article.illustrations %}
-                        <div>
-                            <img src="{{ asset('uploads/illustrations/' ~ illustration.url) }}" alt="Image" width="100">
-                            <p>Nom de l'image: {{ illustration.url }}</p>
+            <!-- Champ Nom -->
+            <div class="form-group mb-4">
+                {{ form_label(form.name, "Nom de l'article", {'label_attr': {'class': 'form-label font-weight-bold'}}) }}
+                {{ form_widget(form.name, {'attr': {'class': 'form-control', 'placeholder': 'Entrez le nom de l\'article'}}) }}
+                {% if form.name.vars.errors|length > 0 %}
+                    <ul class="list-unstyled mt-2">
+                        {% for error in form.name.vars.errors %}
+                            <li class="alert alert-danger p-2">
+                                <i class="bi bi-exclamation-circle-fill me-2"></i> {{ error.message }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+
+            <!-- Champ Description -->
+            <div class="form-group mb-4">
+                {{ form_label(form.description, "Description de l'article", {'label_attr': {'class': 'form-label font-weight-bold'}}) }}
+                {{ form_widget(form.description, {'attr': {'class': 'form-control', 'placeholder': 'Entrez une description détaillée'}}) }}
+                {% if form.description.vars.errors|length > 0 %}
+                    <ul class="list-unstyled mt-2">
+                        {% for error in form.description.vars.errors %}
+                            <li class="alert alert-danger p-2">
+                                <i class="bi bi-exclamation-circle-fill me-2"></i> {{ error.message }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+
+            <!-- Champ Catégorie -->
+            <div class="form-group mb-4">
+                {{ form_label(form.category, "Catégorie", {'label_attr': {'class': 'form-label font-weight-bold'}}) }}
+                {{ form_widget(form.category, {'attr': {'class': 'form-control', 'placeholder': 'Ex: Freestyle, Slalom, etc.'}}) }}
+                {% if form.category.vars.errors|length > 0 %}
+                    <ul class="list-unstyled mt-2">
+                        {% for error in form.category.vars.errors %}
+                            <li class="alert alert-danger p-2">
+                                <i class="bi bi-exclamation-circle-fill me-2"></i> {{ error.message }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+
+            <!-- Gestion des Illustrations -->
+            <h3>Ajouter des images</h3>
+            <div id="illustrations-wrapper">
+                {% for illustration in article.illustrations %}
+                    <div class="d-flex align-items-center mb-2">
+                        <img src="{{ asset('uploads/illustrations/' ~ illustration.url) }}" alt="Image" class="img-thumbnail me-3" width="100">
+                        <p class="mb-0">{{ illustration.url }}</p>
+                        <div class="form-check ms-auto">
+                            <input type="checkbox" class="form-check-input" name="delete_illustrations[]" value="{{ illustration.id }}" id="delete_illustration_{{ illustration.id }}">
+                            <label class="form-check-label" for="delete_illustration_{{ illustration.id }}">Supprimer</label>
                         </div>
-                    {% endfor %}
-                    {{ form_widget(form.illustrations) }}
-                    <button type="button" class="add_item_link" data-collection-holder-class="illustration-collection">Ajouter une image</button>
-                </div>
+                    </div>
+                {% else %}
+                    <p class="text-muted">Aucune image associée à cet article.</p>
+                {% endfor %}
+                {{ form_widget(form.illustrations) }}
+                <button type="button" class="add_item_link btn btn-outline-secondary btn-sm mt-2" data-collection-holder-class="illustration-collection">Ajouter une image</button>
+            </div>
 
-                <h3>Ajouter un lien pour une vidéo</h3>
-                <div id="videos-wrapper">
-                    {% for video in article.videos %}
-                        <div>
-                            <p>URL de la vidéo: {{ video.embedCode }}</p>
+            <h3>Ajouter un lien pour une vidéo</h3>
+            <div id="videos-wrapper">
+                {% for video in article.videos %}
+                    <div class="d-flex align-items-center mb-2">
+                        <p class="mb-0">{{ video.videoUrl }}</p>
+                        <div class="form-check ms-auto">
+                            <input type="checkbox" class="form-check-input" name="delete_videos[]" value="{{ video.id }}" id="delete_video_{{ video.id }}">
+                            <label class="form-check-label" for="delete_video_{{ video.id }}">Supprimer</label>
                         </div>
-                    {% endfor %}
-                    {{ form_widget(form.videos) }}
-                    <button type="button" class="add_item_link" data-collection-holder-class="video-collection">Ajouter un embed code</button>
-                </div>
+                    </div>
+                {% else %}
+                    <p class="text-muted">Aucune vidéo associée à cet article.</p>
+                {% endfor %}
+                {{ form_widget(form.videos) }}
+                <button type="button" class="add_item_link btn btn-outline-secondary btn-sm mt-2" data-collection-holder-class="video-collection">Ajouter l'url de la video</button>
+            </div>
 
-                <button class="btn btn-primary">Envoyer</button>
-                <button class="btn btn-danger">Annuler</button>
+
+            <!-- Boutons d'action -->
+            <div class="d-flex justify-content-between mt-5">
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-check-circle"></i> Sauvegarder
+                </button>
+                    <a href="{{ path('article_details', {'id': article.id, 'slug': article.slug}) }}" class="btn btn-danger">
+                    <i class="bi bi-x-circle"></i> Annuler
+                </a>
+            </div>
+
             {{ form_end(form) }}
         </div>
 
-        <div class="col-md-4">
-            <!-- Liste des images et vidéos existantes -->
-            <h3>Images associées à cet article :</h3>
-            <ul>
+        <!-- Images et vidéos associées -->
+        <div class="col-lg-4">
+            <h3 class="mb-3">Images associées</h3>
+            <ul class="list-group mb-4">
                 {% for illustration in article.illustrations %}
-                    <li>
-                        <img src="{{ asset('uploads/illustrations/' ~ illustration.url) }}" alt="Image" width="100">
-                        <p>{{ illustration.url }}</p>
+                    <li class="list-group-item d-flex align-items-center">
+                        <img src="{{ asset('uploads/illustrations/' ~ illustration.url) }}" alt="Image" class="img-thumbnail me-3" style="width: 100px;">
+                        <span>{{ illustration.url }}</span>
                     </li>
                 {% else %}
-                    <li>Aucune image associée à cet article.</li>
+                    <li class="list-group-item text-muted">Aucune image associée à cet article.</li>
                 {% endfor %}
             </ul>
 
-            <h3>Vidéos associées à cet article :</h3>
-            <ul>
+            <h3 class="mb-3">Vidéos associées</h3>
+            <ul class="list-group">
                 {% for video in article.videos %}
-                    <li>
-                        <p>{{ video.embedCode }}</p>
+                    <li class="list-group-item">
+                        {{ video.videoUrl }}
                     </li>
                 {% else %}
-                    <li>Aucune vidéo associée à cet article.</li>
+                    <li class="list-group-item text-muted">Aucune vidéo associée à cet article.</li>
                 {% endfor %}
             </ul>
         </div>
     </div>
-
+</div>
 {% endblock %}
 
 {% block javascripts %}
@@ -77,7 +141,8 @@
             document.querySelectorAll('.add_item_link').forEach(function (btn) {
                 btn.addEventListener('click', function (e) {
                     const collectionHolder = document.querySelector('.' + e.currentTarget.dataset.collectionHolderClass);
-                    const item = document.createElement('li');
+                    const item = document.createElement('div');
+                    item.classList.add('mb-3');
 
                     item.innerHTML = collectionHolder.dataset.prototype.replace(/__name__/g, collectionHolder.children.length);
                     collectionHolder.appendChild(item);
