@@ -44,8 +44,8 @@ class ArticleService
             $this->handleFileUpload($file, $article);
         }
 
-        foreach ($videos as $embedCode) {
-            $this->handleVideo($embedCode, $article);
+        foreach ($videos as $videoUrl) {
+            $this->handleVideo($videoUrl, $article);
         }
 
         // Persister l'article
@@ -62,8 +62,8 @@ class ArticleService
         }
 
         // Traitement des vidéos
-        foreach ($videos as $embedCode) {
-            $this->handleVideo($embedCode, $article);
+        foreach ($videos as $videoUrl) {
+            $this->handleVideo($videoUrl, $article);
         }
 
         // Enregistrer les changements
@@ -102,12 +102,45 @@ class ArticleService
     }
 
     // Gérer l'ajout des vidéos
-    private function handleVideo($embedCode, Article $article)
+    private function handleVideo($videoUrl, Article $article)
     {
         $video = new Video();
-        $video->setEmbedCode($embedCode);
+        $video->setvideoUrl($videoUrl);
         $article->addVideo($video);
     }
+
+    // Supprimer des fichiers upload photos
+    public function deleteIllustrations(array $illustrationIds, Article $article): void
+    {
+        foreach ($article->getIllustrations() as $illustration) {
+            if (in_array($illustration->getId(), $illustrationIds)) {
+                $article->removeIllustration($illustration);
+                $this->entityManager->remove($illustration);
+            }
+        }
+
+        // Appelle flush pour enregistrer les changements
+        $this->entityManager->flush();
+    }
+
+    // Supprimer des fichiers upload videos
+    public function deleteVideos(array $videoIds, Article $article): void
+    {
+        foreach ($article->getVideos() as $video) {
+            if (in_array($video->getId(), $videoIds)) {
+                $article->removeVideo($video);
+                $this->entityManager->remove($video);
+            }
+        }
+
+        // Appelle flush pour enregistrer les changements
+        $this->entityManager->flush();
+    }
+
+
+
+
+    
 
     
 }

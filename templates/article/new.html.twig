@@ -1,31 +1,84 @@
-{# templates/article/new.html.twig #}
-
 {% extends 'base.html.twig' %}
 
-{% block title %}Créer un Article{% endblock %}
+{% block title %}Modifier l'Article{% endblock %}
 
 {% block body %}
-    <h1>Ajouter un Nouvel Article</h1>
+<div class="container my-5">
+    <h1 class="mb-4 text-center text-uppercase">Modifier l'Article</h1>
 
-    {{ form_start(form) }}
-        {{ form_row(form.name) }}
-        {{ form_row(form.description) }}
-        {{ form_row(form.category) }}
-        
-        <div>Ajouter des images</div>
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            {{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
+
+            <!-- Champ Nom -->
+            <div class="form-group mb-4">
+                {{ form_label(form.name, "Nom de l'article", {'label_attr': {'class': 'form-label font-weight-bold'}}) }}
+                {{ form_widget(form.name, {'attr': {'class': 'form-control', 'placeholder': 'Entrez le nom de l\'article'}}) }}
+                {% if form.name.vars.errors|length > 0 %}
+                    <ul class="list-unstyled mt-2">
+                        {% for error in form.name.vars.errors %}
+                            <li class="alert alert-danger p-2">
+                                <i class="bi bi-exclamation-circle-fill me-2"></i> {{ error.message }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+
+            <!-- Champ Description -->
+            <div class="form-group mb-4">
+                {{ form_label(form.description, "Description de l'article", {'label_attr': {'class': 'form-label font-weight-bold'}}) }}
+                {{ form_widget(form.description, {'attr': {'class': 'form-control', 'placeholder': 'Entrez une description détaillée'}}) }}
+                {% if form.description.vars.errors|length > 0 %}
+                    <ul class="list-unstyled mt-2">
+                        {% for error in form.description.vars.errors %}
+                            <li class="alert alert-danger p-2">
+                                <i class="bi bi-exclamation-circle-fill me-2"></i> {{ error.message }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+
+            <!-- Champ Catégorie -->
+            <div class="form-group mb-4">
+                {{ form_label(form.category, "Catégorie", {'label_attr': {'class': 'form-label font-weight-bold'}}) }}
+                {{ form_widget(form.category, {'attr': {'class': 'form-control', 'placeholder': 'Ex: Freestyle, Slalom, etc.'}}) }}
+                {% if form.category.vars.errors|length > 0 %}
+                    <ul class="list-unstyled mt-2">
+                        {% for error in form.category.vars.errors %}
+                            <li class="alert alert-danger p-2">
+                                <i class="bi bi-exclamation-circle-fill me-2"></i> {{ error.message }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+
+            <!-- Gestion des Illustrations -->
+            <div>Ajouter des images</div>
         <div id="illustrations-wrapper">
             {{ form_widget(form.illustrations) }}
-            <button type="button" class="add_item_link" data-collection-holder-class="illustration-collection">Ajouter une image</button>
+            <button type="button" class="add_item_link btn btn-outline-secondary btn-sm" data-collection-holder-class="illustration-collection">Ajouter une image</button>
         </div>
 
         <div>Ajouter un lien pour une vidéo</div>
         <div id="videos-wrapper">
             {{ form_widget(form.videos) }}
-            <button type="button" class="add_item_link" data-collection-holder-class="video-collection">Ajouter un embed code</button>
+            <button type="button" class="add_item_link btn btn-outline-secondary btn-sm" data-collection-holder-class="video-collection">Ajouter un embed code</button>
         </div>
 
-        <button class="btn btn-primary">Envoyer</button>
-    {{ form_end(form) }}
+            <!-- Bouton Envoyer -->
+            <div class="text-center mt-5">
+                <button type="submit" class="btn btn-primary btn-lg px-5">
+                    <i class="bi bi-check-circle"></i> Envoyer
+                </button>
+            </div>
+
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 {% block javascripts %}
@@ -35,7 +88,8 @@
             document.querySelectorAll('.add_item_link').forEach(function (btn) {
                 btn.addEventListener('click', function (e) {
                     const collectionHolder = document.querySelector('.' + e.currentTarget.dataset.collectionHolderClass);
-                    const item = document.createElement('li');
+                    const item = document.createElement('div');
+                    item.classList.add('mb-3');
 
                     item.innerHTML = collectionHolder.dataset.prototype.replace(/__name__/g, collectionHolder.children.length);
                     collectionHolder.appendChild(item);

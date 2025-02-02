@@ -16,7 +16,7 @@ class Video
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $embedCode = null;
+    private ?string $videoUrl = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $created_at = null;
@@ -36,14 +36,14 @@ class Video
         return $this->id;
     }
 
-    public function getEmbedCode(): ?string
+    public function getVideoUrl(): ?string
     {
-        return $this->embedCode;
+        return $this->videoUrl;
     }
 
-    public function setEmbedCode(string $embedCode): self
+    public function setVideoUrl(string $videoUrl): self
     {
-        $this->embedCode = $embedCode;
+        $this->videoUrl = $videoUrl;
         return $this;
     }
 

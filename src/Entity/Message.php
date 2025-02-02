@@ -1,9 +1,12 @@
 <?php
+// src/Entity/Message.php
 
 namespace App\Entity;
 
 use App\Repository\MessageRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 #[ORM\Entity(repositoryClass: MessageRepository::class)]
 class Message
@@ -13,7 +16,14 @@ class Message
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: 'text')]
+    #[Assert\NotBlank(message: "Le contenu du message ne peut pas être vide.")]
+    #[Assert\Length(
+        min: 5,
+        max: 500,
+        minMessage: "Le message doit contenir au moins {{ limit }} caractères.",
+        maxMessage: "Le message ne peut pas dépasser {{ limit }} caractères."
+    )]
     private ?string $content = null;
 
     #[ORM\ManyToOne]
@@ -37,10 +47,9 @@ class Message
         return $this->content;
     }
 
-    public function setContent(string $content): static
+    public function setContent(string $content): self
     {
         $this->content = $content;
-
         return $this;
     }
 
@@ -49,10 +58,9 @@ class Message
         return $this->article;
     }
 
-    public function setArticle(?Article $article): static
+    public function setArticle(?Article $article): self
     {
         $this->article = $article;
-
         return $this;
     }
 
@@ -61,22 +69,20 @@ class Message
         return $this->created_at;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $created_at): static
+    public function setCreatedAt(\DateTimeImmutable $created_at): self
     {
         $this->created_at = $created_at;
-
         return $this;
     }
 
-    public function getUserId(): ?User
+    public function getUser(): ?User
     {
         return $this->user;
     }
 
-    public function setUserId(?User $user): static
+    public function setUser(?User $user): self
     {
         $this->user = $user;
-
         return $this;
     }
 }

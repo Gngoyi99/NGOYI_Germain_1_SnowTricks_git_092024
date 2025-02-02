@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier le Commentaire{% endblock %}
+
+{% block body %}
+<div class="container my-5">
+    <h1 class="text-center mb-4">Modifier le Commentaire</h1>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <!-- Formulaire de modification du commentaire -->
+            {{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
+
+            <!-- Champ Contenu -->
+            <div class="form-group mb-4">
+                {{ form_label(form.content, "Votre Commentaire", {'label_attr': {'class': 'form-label font-weight-bold'}}) }}
+                {{ form_widget(form.content, {'attr': {'class': 'form-control', 'placeholder': 'Écrivez votre commentaire ici...'}}) }}
+
+                {% if form.content.vars.errors|length > 0 %}
+                    <ul class="list-unstyled mt-2">
+                        {% for error in form.content.vars.errors %}
+                            <li class="alert alert-danger p-2">
+                                <i class="bi bi-exclamation-circle-fill me-2"></i> {{ error.message }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+
+            <!-- Boutons d'action -->
+            <div class="d-flex justify-content-between">
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-check-circle"></i> Sauvegarder
+                </button>
+
+                {% if article is defined %}
+                    <a href="{{ path('article_details', {'id': article.id, 'slug': article.slug}) }}" class="btn btn-danger">
+                        <i class="bi bi-x-circle"></i> Annuler
+                    </a>
+                {% else %}
+                    <a href="{{ path('app_home') }}" class="btn btn-danger">
+                        <i class="bi bi-x-circle"></i> Annuler
+                    </a>
+                {% endif %}
+            </div>
+
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+{% endblock %}

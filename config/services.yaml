@@ -23,7 +23,6 @@ services:
         resource: '../src/'
         exclude:
             - '../src/DependencyInjection/'
-            - '../src/Entity/'
             - '../src/Kernel.php'
             
 
@@ -34,3 +33,5 @@ services:
         arguments:
             $uploadDirectory: '%illustrations_directory%'  # Injecter le paramètre dans le service
     # please note that last definitions always *replace* previous ones
+
+    

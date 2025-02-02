@@ -5,22 +5,48 @@
 {% block header_title %}Snowtricks{% endblock %}
 
 {% block body %}
-<h1>Figures</h1>
 
-{% for article in articles %}
-    <div class="article">
-        <h2><a href="{{ path('article_details', { id: article.id, slug: article.slug }) }}">{{ article.name }}</a></h2>
-        <p>Catégorie: {{ article.category }}</p>
-        {# <p>Auteur: {{ article.user_id }}</p> Faire une concat pour afficher le user#}
+<div class="text-center">
+    <p>SnowTricks est un projet ambitieux porté par Jimmy Sweat, un passionné de snowboard, visant à démocratiser ce sport et à faciliter l'apprentissage des 
+    figures grâce à un site collaboratif. La plateforme s'appuiera sur du contenu généré par les internautes pour offrir une expérience riche et engageante.</p>
+</div>
+<h2>Chapeau l'artiste</h2>
+<div class="container mt-4 figure">
+    <div class="row">
+        {% for article in articles %}
+            <div class="col-6 col-sm-4 col-md-2 mb-4">
+                <div class="card shadow-sm text-center position-relative">
+                    <a href="{{ path('article_details', { id: article.id, slug: article.slug }) }}" class="stretched-link text-decoration-none"></a>
+                    <div class="card-body">
+                        <h2 class="card-title text-dark">{{ article.name }}</h2>
+                        <p class="card-text badge bg-info text-dark">{{ article.category }}</p>
+                        <p class="text-muted">Publié le {{ article.createdAt|date('d/m/Y') }}</p>
 
-        <a href="{{ path('article_edit', {'id': article.id}) }}" class="btn btn-primary">Modifier</a>
 
-        <form method="post" action="{{ path('article_delete', {'id': article.id}) }}" style="display:inline;" onsubmit="return confirm('Voulez-vous vraiment supprimer cet article ?');">
-            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ article.id) }}">
-            <button type="submit" class="btn btn-danger">Supprimer</button>
-        </form>
+                        {# Afficher les boutons Modifier/Supprimer si l'utilisateur a les droits #}
+                        <div class="mt-2 position-relative">
+                            {% if is_granted('article_edit', article) %}
+                                <a href="{{ path('article_edit', {'id': article.id}) }}" class="btn btn-outline-warning btn-sm">
+                                    <i class="bi bi-pencil"></i> Modifier
+                                </a>
+                            {% endif %}
+
+                            {% if is_granted('article_delete', article) %}
+                                <form method="post" action="{{ path('article_delete', {'id': article.id}) }}" style="display:inline;" onsubmit="return confirm('Voulez-vous vraiment supprimer cet article ?');">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ article.id) }}">
+                                    <button type="submit" class="btn btn-outline-danger btn-sm">
+                                        <i class="bi bi-trash"></i> Supprimer
+                                    </button>
+                                </form>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <p>Aucun article.</p>
+        {% endfor %}
     </div>
-{% else %}
-    <p>Aucun article.</p>
-{% endfor %}
+</div>
+
 {% endblock %}
