@@ -1,0 +1,13 @@
+Jeu de donnée qui vont permettre d'avoir les 10 figures qui sont assigné au user 1:
+
+INSERT INTO figures (id, user_id, name, description, category, created_at, updated_at, slug) VALUES
+(1, 1, 'Mute', 'Saisie de la carre frontside de la planche entre les deux pieds avec la main avant.', 'Grab', NOW(), NOW(), 'mute'),
+(2, 1, 'Sad', 'Saisie de la carre backside de la planche, entre les deux pieds, avec la main avant.', 'Grab', NOW(), NOW(), 'sad'),
+(3, 1, 'Indy', 'Saisie de la carre frontside de la planche, entre les deux pieds, avec la main arrière.', 'Grab', NOW(), NOW(), 'indy'),
+(4, 1, 'Stalefish', 'Saisie de la carre backside de la planche entre les deux pieds avec la main arrière.', 'Grab', NOW(), NOW(), 'stalefish'),
+(5, 1, 'Tail Grab', 'Saisie de la partie arrière de la planche, avec la main arrière.', 'Grab', NOW(), NOW(), 'tail-grab'),
+(6, 1, 'Nose Grab', 'Saisie de la partie avant de la planche, avec la main avant.', 'Grab', NOW(), NOW(), 'nose-grab'),
+(7, 1, 'Japan Air', 'Saisie de l\'avant de la planche, avec la main avant, du côté de la carre frontside.', 'Grab', NOW(), NOW(), 'japan-air'),
+(8, 1, 'Seat Belt', 'Saisie du carre frontside à l\'arrière avec la main avant.', 'Grab', NOW(), NOW(), 'seat-belt'),
+(9, 1, 'Truck Driver', 'Saisie du carre avant et carre arrière avec chaque main (comme tenir un volant de voiture).', 'Grab', NOW(), NOW(), 'truck-driver'),
+(10, 1, '180', 'Rotation horizontale de 180 degrés.', 'Rotation', NOW(), NOW(), '180');
