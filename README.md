@@ -38,3 +38,6 @@ npm run build
 ```sh
 symfony serve -d
 ```
+Codacy:
+
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/77e5b47b3b2a45ecb7e630c5c162e02f)](https://app.codacy.com/gh/Gngoyi99/NGOYI_Germain_1_SnowTricks_git_092024/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
